@@ -93,12 +93,51 @@ begin
   temp^.next^.pred:= parc;
   temp^.next:= parc;
 end;
-{Procedure Stergerea(var sant1: Element, nume: string);
+Procedure Stergerea(var sant1: Element; sant2: Element; nume: string);
 var
-
+  temp, parc: Element;
+begin
+  parc:=sant1^.next;
+  while ((parc <> sant2) and (nume <> parc^.info.nume)) do
+begin
+  parc:=parc^.next;
+end;
+  if (parc^.next <> Nil) then 
 begin
 
-end;}
+  parc^.pred^.next:= parc^.next;
+  parc^.next^.pred:= parc^.pred;
+  dispose(parc);
+end;
+end;
+Function CheckStagiul(sant1, sant2: Element): Boolean;
+var
+  parc: Element;
+begin
+  parc:=sant1^.next;
+  while (parc <> sant2) do
+begin
+ if (parc^.info.stagiul>=20) then
+begin
+  CheckStagiul:=True;
+  break;
+end;
+end;
+end;
+Function Media (sant1: Element; sant2: Element): real;
+var
+  s,n:integer;
+  parc: Element;
+begin
+  parc:=sant1^.next;
+  while(parc <> sant2) do
+begin
+  s:=s + parc^.info.salariu;
+  n:=n+1;
+  parc:= parc^.next;
+end;
+  Media:= s / n;
+  end;
 begin
   new(sant1);
   new(sant2);
@@ -142,7 +181,13 @@ begin
     writeln('Хотите добавить сотрудника, если ДА - нажите D: ');
     readln(raspuns);
    end;
-   {writeln('Introduceti numele studentului: ');
+   //2
+   writeln('Введите имя сотрудника: ');
    readln(numeCaut);
-   Stergerea(sant1, numeCaut);}
+   //3
+   Stergerea(sant1, sant2, numeCaut);
+   if(CheckStagiul(sant1, sant2)) then writeln('Есть такие сотрудники')
+   else writeln ('Нет таких сотрудников');
+   //4
+   writeln('Средний оклад: ', Media(sant1, sant2));
 end.  
