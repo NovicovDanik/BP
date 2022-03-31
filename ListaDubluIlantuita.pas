@@ -1,140 +1,148 @@
 Program ListaDublu;
-Type
-   Angajat = Record
-   Nume: string;
-   Data: Record
-   Zi: 1..31;
-   Luna: 1..12;
-   An: integer;
+type
+  Angajat = Record
+    nume: string;
+    data: Record
+      zi: 1..31;
+      luna: 1..12;
+      an: integer;
+    end;
+    domiciliu: string;
+    stagiul: byte;
+    rol: string;
+    salariu: integer;
   end;
-  Domiciliu: string;
-  Stagiul: byte;
-  Rol: string;
-  Salariu: integer;
- end;
-   Element = ^Nod;
-   Nod = Record
-   Info: Angajat;
-   Next: Element;
-   Pred: Element;
- end;
-Var
-  prim, ult, x, sant1, sant2: Element;
+  Element = ^Nod;
+  Nod = Record
+    info: Angajat;
+    next: Element;
+    pred: Element;
+  end;
+var
+  x: Angajat;
+  sant1, sant2, aux: Element;
   raspuns: char;
   key: 1..4;
-Procedure AdaugIn(x: Angajat; var sant1:Element);
+  numeCaut: string;
+  
+Procedure AdaugInc(x: Angajat; var sant1: Element);
 var y: Element;
 begin
-  y:=sant1;
+  y:= sant1;
   new(sant1);
-  y^.Info:=x;
-  y^.Pred:= sant1;
-  sant1^.Next:=y;
-  {x^.Pred:= sant1;
-  x^.Next:= sant1^.Next;
-  sant1^.Next^.Pred:= x;
-  sant1^.Next:= x;}
+  y^.info:= x;
+  y^.pred:= sant1;
+  sant1^.next:=y;
+  {x^.pred:= sant1;
+  x^.next:= sant1^.next;
+  sant1^.next^.pred:= x;
+  sant1^.next:= x;}
 end;
-Procedure AdaugC(x: Angajat; var sant2:Element);
-var y:Element;
+Procedure AdaugCap(x: Angajat; var sant2: Element);
+var y: Element;
 begin
-  y:=sant1;
+  y:= sant2;
   new(sant1);
-  y^.Info:=x;
-  y^.Pred:= sant2;
-  sant1^.Next:=y;
-  {x^.Pred:= sant2^.Pred;
-  x^.Next:= sant2;
-  sant2^.Pred^.Next:= x;
-  sant1^.Pred:= x;}
+  y^.info:= x;
+  y^.next:= sant2;
+  sant2^.pred:=y;
+  {x^.pred:= sant2^.pred;
+  x^.next:= sant2;
+  sant2^.pred^.next:= x;
+  sant1^.pred:= x;}
 end;
-Procedure AdaugInain(x: Element);
-var
-  p, tempoz: byte;
+Procedure AdaugIna(x: Angajat; var sant1: Element; var sant2: Element);
+var 
+  poz, tempPoz: byte;
   temp, parc: Element;
+  y: Element;
 begin
   writeln('Введите позицию: ');
-  readln(p);
-  parc:= sant1^.Next;
-  tempoz:=1;
-  while((parc <> sant2) and (tempoz <> p))do
-Begin
-  tempoz:=tempoz + 1;
-  temp:= parc;
-  parc:= parc^.Next;
+  readln(poz);
+  parc:= sant1^.next;
+  tempPoz:= 1;
+  while((parc <> sant2) and (tempPoz <> poz)) do begin
+    tempPoz:= tempPoz + 1;
+    temp:= parc;
+    parc:= parc^.next;
+  end;
+  parc^.pred:= temp^.pred;
+  parc^.next:= temp;
+  parc^.info:= x;
+  temp^.pred^.next:= parc;
+  temp^.pred:= parc;
 end;
-  x^.Pred:= temp^.Pred;
-  x^.Next:= temp;
-  temp^.Pred^.Next:= x;
-  temp^.Pred:= x;
-end;
-Procedure AdD(x: Element);
-var
-  p, tempoz: byte;
+Procedure AdaugDup(x: Angajat; var sant1: Element; var sant2: Element);
+var 
+  poz, tempPoz: byte;
   temp, parc: Element;
+  y: Element;
 begin
   writeln('Введите позицию: ');
-  readln(p);
-  parc:= sant1^.Next;
-  tempoz:=1;
-  while((parc <> sant2) and (tempoz <> p))do
-Begin
-  tempoz:=tempoz + 1;
-  temp:= parc;
-  parc:= parc^.Next;
+  readln(poz);
+  parc:= sant1^.next;
+  tempPoz:= 1;
+  while((parc <> sant2) and (tempPoz <> poz)) do begin
+    tempPoz:= tempPoz + 1;
+    temp:= parc;
+    parc:= parc^.next;
+  end;
+  parc^.pred:= temp;
+  parc^.next:= temp^.next;
+  parc^.info:= x;
+  temp^.next^.pred:= parc;
+  temp^.next:= parc;
 end;
-  x^.Pred:= temp^.Pred;
-  x^.Next:= temp;
-  temp^.Next^.Pred:= x;
-  temp^.Next:= x;
-end;
-Begin
+{Procedure Stergerea(var sant1: Element, nume: string);
+var
+
+begin
+
+end;}
+begin
   new(sant1);
   new(sant2);
-  sant1^.Next:= sant2;
-  sant1^.Pred:= Nil;
-  sant1^.Next:= Nil;
-  sant2^.Pred:= sant1;
-  while((raspuns ='d') or (raspuns = 'D')) do
-Begin
-  new(x);
-  writeln('Введите имя сотрудника: ');
-  readln(x.Info.Nume);
-  writeln('Введите день рождения сотрудника: ');
-  readln(x.Info.Data.Zi);
-  writeln('Введите месяц рождения сотрудника: ');
-  readln(x.Info.Data.Luna);
-  writeln('Введите год рождения сотрудника: ');
-  readln(x.Info.Data.An);
-  writeln('Введите прописку сотрудника: ');
-  readln(x.Info.Data.Domiciliu);
-  writeln('Введите стаж работы сотрудника: ');
-  readln(x.Info.Data.Stagiul);
-  writeln('Введите должность сотрудника: ');
-  readln(x.Info.Data.Rol);
-  writeln('Введите оклад сотрудника: ');
-  readln(x.Info.Data.Salariu);
-  writeln('Куда добавить информацию? ');
-  writeln('1. Начало');
-  writeln('2. Конец');
-  writeln('3. Перед элементом');
-  writeln('4. После элемента');
-  readln(key);
-  if (key = 1) then AdIn(x)
-  else
-  if (key = 2) then AdC(x)
-  else
-  if (key = 3) then AdInain(x)
-  else AdD(x);
-
-  writeln('Хотите добавить студента, если ДА, нажите D: ');
+  sant1^.next:= sant2;
+  sant1^.pred:= Nil;
+  sant1^.next:= Nil;
+  sant2^.pred:= sant1;
+  writeln('Хотите добавить сотрудника, если ДА - нажите D: ');
   readln(raspuns);
-end;
-end.
-
-
-
-
-
-
-
+  while((raspuns = 'd') or (raspuns = 'D')) do begin
+    //new(x);
+    writeln('Введите имя сотрудника: ');
+    readln(x.nume);
+    writeln('Введите день рождения сотрудника: ');
+    readln(x.data.zi);
+    writeln('Введите месяц рождения сотрудника: ');
+    readln(x.data.luna);
+    writeln('Введите год рождения сотрудника: ');
+    readln(x.data.an);
+    writeln('Введите прописку сотрудника: ');
+    readln(x.domiciliu);
+    writeln('Введите стаж работы сотрудника: ');
+    readln(x.stagiul);
+    writeln('Введите должность сотрудника: ');
+    readln(x.rol);
+    writeln('Введите оклад сотрудника: ');
+    readln(x.salariu);
+    writeln('Куда добавить информацию: ');
+    writeln('1. Начало');
+    writeln('2. Конец');
+    writeln('3. Перед элементом');
+    writeln('4. После элемента');
+    readln(key);
+    if (key = 1) then AdaugInc(x, sant1)
+    else
+      if (key = 2) then AdaugCap(x, sant2)
+      else
+       if (key = 3) then AdaugIna(x, sant1, sant2)
+       else AdaugDup(x, sant1, sant2);
+       
+    writeln('Хотите добавить сотрудника, если ДА - нажите D: ');
+    readln(raspuns);
+   end;
+   {writeln('Introduceti numele studentului: ');
+   readln(numeCaut);
+   Stergerea(sant1, numeCaut);}
+end.  
