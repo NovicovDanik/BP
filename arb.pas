@@ -42,6 +42,16 @@ begin
   else Check:= Check(Arb^.ASt, val) or Check(Arb^.ADr, val);
   end;
 end;
+Function Minim(Arb: Ab): real;
+begin
+  if Arb = Nil then
+  Minim:=Minim;
+  else begin
+  if Arb^.inf < 0 then
+  Minim:= 1 + NumNegative(Arb^.ASt) + NumNegative(Arb^.ADr)
+  else
+  Minim:= NumNegative(Arb^.ASt) + NumNegative(Arb^.ADr)
+end;
 var
   Arbore: Ab;
   val: real;
@@ -53,6 +63,7 @@ begin
   readln(val);
   if (Check(Arbore, val)) then writeln('Элемент ', val, ' принадлежит двоичному дереву')
   else writeln('Элемент ', val, ' не принадлежит двоичному дереву');
+  writeln('Минимальное значение: ');
 end.
 
 
